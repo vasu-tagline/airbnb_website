@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form action="/login" method="post">
+        <label>Username:</label><br>
+        <input type="text" name="username" required><br><br>
+    
+        <label>Password:</label><br>
+        <input type="password" name="password" required><br><br>
+        
+        <input type="submit" value="Login">
+
+        <br><br><br><br><br>
+
+        <p>
+            If you are first time, then :
+            <a href="/register">REGISTER</a>
+        </p>
+        
+    </form>    
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+<h2>Available Properties</h2>
+
+{% for p in properties %}
+<div style="border:1px solid #ccc; padding:10px; margin-bottom:15px;">
+
+    <img src="{{ url_for('static', filename='uploads/' + p[7]) }}" width="250"><br>
+
+    <strong>{{ p[2] }}</strong><br><br>
+    owner_id:   {{ p[1]}}<br><br>
+    Type: {{ p[3] }}<br><br>
+    Price: ₹{{ p[4] }} - per Night<br><br>
+    Address: {{ p[5] }}<br><br>
+    Status: {{ p[8] }}<br><br>
+    
+    <a href="{{ url_for('property_detail', property_id=p[0]) }}">View Details</a>
+
+</div>
+{% endfor %}
+

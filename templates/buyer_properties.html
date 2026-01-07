@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Properties</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            margin: 20px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        /* GRID */
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 420px);
+            gap: 25px;
+            justify-content: start;
+        }
+
+        /* CARD */
+        .property-card {
+            width: 420px;
+            height: 460px;
+            background: #fff;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+         /* IMAGE BOX (FIXED SIZE) */
+        .image-box {
+            width: 420px;
+            height: 180px;
+            overflow: hidden;
+        }
+
+        .image-box img {
+            width: 420px;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* CONTENT */
+        .property-body {
+            padding: 15px;
+            flex: 1;
+        }
+
+        .property-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .property-body p {
+            margin: 4px 0;
+            font-size: 14px;
+        }
+
+        /* OWNER */
+        .owner {
+            font-style: italic;
+            color: #555;
+        }
+
+        /* ACTIONS */
+        .property-actions {
+            padding: 12px 15px;
+            border-top: 1px solid #eee;
+            text-align: right;
+        }
+
+        .property-actions a {
+            text-decoration: none;
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Available Properties</h2>
+
+{% if properties %}
+<div class="properties-grid">
+
+    {% for p in properties %}
+    <div class="property-card">
+
+        <div class="image-box">
+            <img src="{{ url_for('static', filename='uploads/' + p[4]) }}">
+        </div>
+
+        <div class="property-body">
+            <div class="property-title">{{ p[0] }}</div>
+
+            <p><strong>Price:</strong> ₹{{ p[1] }} </p><br>
+            <p><strong>Address:</strong> {{ p[2] }}</p><br>
+            <p><strong>Description:</strong> {{ p[3] }}</p><br>
+            <p><strong>Contact:</strong> {{ p[5] }}</p><br>
+            <p><strong>Status:</strong> {{ p[6] }}</p><br>
+            </strong><p class="owner"><strong>Owner:</strong> {{ p[7] }}</p><br>
+            <p><strong>Owner_id:</strong> {{ p[8] }}</p><br>
+            <p><strong>Type:</strong> {{ p[9] }}</p><br> 
+            <p><strong>Deal_type:</strong> {{ p[10] }}</p><br>          
+        </div>
+
+        
+
+    </div>
+    {% endfor %}
+
+</div>
+{% else %}
+<p>No properties available.</p>
+{% endif %}
+
+<a href="/buyer/dashboard">⬅ Back to Dashboard</a>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/register" method="post">
+
+        <label>Select Role:</label><br>
+        <select name="user_type" required>
+            <option  value="">-- Select --</option>
+            <option name="role" value="owner">Owner</option>
+            <option name="role" value="buyer">Buyer</option>
+        </select><br><br>
+    
+
+        <label>Enter a Name:</label><br>
+        <input type="text" name="username" required><br><br>
+    
+        <label>Enter a Password:</label><br>
+        <input type="password" name="password" required><br><br>
+       
+        <label>Enter a Email:</label><br>
+        <input type="email" name="email" required><br><br>
+        
+        <input type="submit" value="Register">
+         
+        <br><br><br><br><br>
+    </form>    
+</body>
+</html>
