@@ -94,31 +94,38 @@
 {% if properties %}
 <div class="properties-grid">
 
-    {% for p in properties %}
-    <div class="property-card">
+     {% for p in properties %}
+     <div class="property-card">
 
+        <!-- IMAGE -->
         <div class="image-box">
-            <img src="{{ url_for('static', filename='uploads/' + p[4]) }}">
+            <img src="{{ url_for('static', filename='uploads/' + p[3]) }}" alt="Property Image">
         </div>
 
+        <!-- CONTENT -->
         <div class="property-body">
             <div class="property-title">{{ p[0] }}</div>
 
-            <p><strong>Price:</strong> ₹{{ p[1] }} </p><br>
-            <p><strong>Address:</strong> {{ p[2] }}</p><br>
-            <p><strong>Description:</strong> {{ p[3] }}</p><br>
-            <p><strong>Contact:</strong> {{ p[5] }}</p><br>
-            <p><strong>Status:</strong> {{ p[6] }}</p><br>
-            </strong><p class="owner"><strong>Owner:</strong> {{ p[7] }}</p><br>
-            <p><strong>Owner_id:</strong> {{ p[8] }}</p><br>
-            <p><strong>Type:</strong> {{ p[9] }}</p><br> 
-            <p><strong>Deal_type:</strong> {{ p[10] }}</p><br>          
+            <p><strong>Price:</strong> ₹{{ p[1] }}</p>
+            <p><strong>Description:</strong> {{ p[2] }}</p>
+            <p><strong>Contact:</strong> {{ p[4] }}</p>
+            <p><strong>Status:</strong> {{ p[5] }}</p>
+
+            <p class="owner">
+                <strong>Owner:</strong> {{ p[6] }}
+            </p>
+
+            <p><strong>Owner ID:</strong> {{ p[7] }}</p>
+            <p><strong>Type:</strong> {{ p[8] }}</p>
+            <p><strong>Deal Type:</strong> {{ p[9] }}</p>
+            <p><strong>State:</strong> {{ p[10] }}</p>
+            <p><strong>City:</strong> {{ p[11] }}</p>
+            <p><strong>Area:</strong> {{ p[12] }}</p>
         </div>
-
-        
-
+ 
     </div>
-    {% endfor %}
+{% endfor %}
+ 
 
 </div>
 {% else %}

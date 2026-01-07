@@ -100,7 +100,7 @@
     <div class="property-card">
 
         <div class="image-box">
-            <img src="{{ url_for('static', filename='uploads/' + p[7]) }}">
+            <img src="{{ url_for('static', filename='uploads/' + p[6]) }}">
         </div>
 
         <div class="property-body">
@@ -109,10 +109,13 @@
             <p><strong>Type:</strong> {{ p[3] }}</p>
             <p><strong>Price:</strong> ₹{{ p[4] }} </p>
             <p><strong>Address:</strong> {{ p[5] }}</p>
-            <p><strong>Contact:</strong> {{ p[8] }}</p>
-            <p><strong>Status:</strong> {{ p[9] }}</p>
+            <p><strong>Contact:</strong> {{ p[7] }}</p>
+            <p><strong>Status:</strong> {{ p[8] }}</p>
             <p><strong>Owner_id:</strong> {{ p[1] }}</p>
-            <p><strong>Deal_type:</strong> {{ p[10] }}</p>
+            <p><strong>Deal_type:</strong> {{ p[9] }}</p>
+            <p><strong>State:</strong> {{ p[10] }}</p>
+            <p><strong>City:</strong> {{ p[11] }}</p>
+            <p><strong>area:</strong> {{ p[12] }}</p>
         </div>
 
     <div class="property-actions">

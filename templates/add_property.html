@@ -13,8 +13,6 @@
 
     <input type="number" name="price" placeholder="Price" required><br><br>
 
-    <input type="text" name="address" placeholder="Address" required><br><br>
-
     <textarea name="description" placeholder="Description"></textarea><br><br>
 
     <input type="text" name="mobile" placeholder="CONTACT NO" required><br><br>
@@ -29,6 +27,70 @@
         <option value="rent">Rent</option>
     </select><br><br>  
     
+
+
+    <label>State :</label>
+<select name="state" id="state" onchange="loadCities()" required>
+    <option value="">Select State</option>
+    <option value="Gujarat">Gujarat</option>
+    <option value="Rajasthan">Rajasthan</option>
+</select><br><br>
+
+<label>City :</label>
+<select name="city" id="city" onchange="loadAreas()" required>
+    <option value="">Select City</option>
+</select><br><br>
+
+<label>Area :</label>
+<select name="area" id="area" required>
+    <option value="">Select Area</option>
+</select>
+
+<script>
+const data = {
+    Gujarat: {
+        Surat: ["Vesu", "Mota Varachha", "Kamrej", "Sarthana Jakatnaka"],
+        Ahmedabad: ["Bopal", "Maninagar", "Navrangpura"],
+        Rajkot: ["Kalavad Road", "150 Feet Ring Road"]
+    },
+    Rajasthan: {
+        Jaipur: ["Vaishali Nagar", "Malviya Nagar"],
+        Udaipur: ["Hiran Magri"]
+    }
+};
+
+function loadCities() {
+    let state = document.getElementById("state").value;
+    let city = document.getElementById("city");
+    let area = document.getElementById("area");
+
+    city.innerHTML = "<option value=''>Select City</option>";
+    area.innerHTML = "<option value=''>Select Area</option>";
+
+    if (state && data[state]) {
+        Object.keys(data[state]).forEach(c => {
+            city.innerHTML += `<option value="${c}">${c}</option>`;
+        });
+    }
+}
+
+function loadAreas() {
+    let state = document.getElementById("state").value;
+    let city = document.getElementById("city").value;
+    let area = document.getElementById("area");
+
+    area.innerHTML = "<option value=''>Select Area</option>";
+
+    if (state && city) {
+        data[state][city].forEach(a => {
+            area.innerHTML += `<option value="${a}">${a}</option>`;
+        });
+    }
+}
+</script>
+ 
+
+   <br><br>
     <button type="submit">Add Property</button>
 
 </form>

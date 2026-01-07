@@ -35,7 +35,8 @@ def create_table():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             role TEXT,
             username TEXT UNIQUE,
-            password TEXT
+            password TEXT,
+            email TEXT
         )
     """)
     conn.commit()
@@ -133,65 +134,20 @@ def create_property_table():
             title TEXT,
             type TEXT,
             price INTEGER,
-            address TEXT,
             description TEXT,
             image TEXT,
             contact_number TEXT,
-            status TEXT DEFAULT 'available'
+            status TEXT DEFAULT 'available',
+            deal_type TEXT,
+            state TEXT,
+            city TEXT,
+            area TEXT
         )
     """)
     conn.commit()
     conn.close()
 create_property_table()
 
-
-
-
-def create_migration_table():
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS schema_migrations (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            migration_name TEXT UNIQUE
-        )
-    """)
-    conn.commit()
-    conn.close()
-
-create_migration_table()
-
-def run_migrations():
-    conn = get_db()
-    cursor = conn.cursor()
-
-    migrations = [
-        ("add_email_to_users", "ALTER TABLE users ADD COLUMN email TEXT"),
-        ("add_deal_type_to_properties", "ALTER TABLE properties ADD COLUMN deal_type TEXT"),
-
-    ]
-
-    for name, sql in migrations:
-        cursor.execute(
-            "SELECT 1 FROM schema_migrations WHERE migration_name=?",
-            (name,)
-        )
-        already_ran = cursor.fetchone()
-
-        if not already_ran:
-            try:
-                cursor.execute(sql)
-                cursor.execute(
-                    "INSERT INTO schema_migrations (migration_name) VALUES (?)",
-                    (name,)
-                )
-                conn.commit()
-                print(f"Migration applied: {name}")
-            except sqlite3.OperationalError as e:
-                print(f"Migration failed: {e}")
-
-    conn.close()
-run_migrations()
 
 
 
@@ -216,10 +172,13 @@ def add_property():
         title = request.form["title"]
         type_ = request.form["type"]
         price = request.form["price"]
-        address = request.form["address"]
+        # address = request.form["address"]
         description = request.form["description"]
         contact_number = request.form["mobile"]
         deal_type = request.form["deal_type"]
+        state = request.form["state"]
+        city = request.form["city"]
+        area = request.form["area"]
         
         # IMAGE PART
         image = request.files["image"]
@@ -239,9 +198,9 @@ def add_property():
 
         cursor.execute("""
             INSERT INTO properties
-            (owner_id, title, type, price, address, description,contact_number,deal_type,image)
-            VALUES (?, ?, ?, ?, ?, ?,?,?,?)
-        """, (owner_id, title, type_, price, address, description,contact_number,deal_type,filename))
+            (owner_id, title, type, price, description,contact_number,deal_type,state,city,area,image)
+            VALUES (?, ?, ?, ?,?,?,?,?,?,?,?)
+        """, (owner_id, title, type_, price, description,contact_number,deal_type,state,city,area,filename))
 
         conn.commit()
         conn.close()
@@ -298,7 +257,6 @@ def buyer_properties():
         SELECT 
             p.title,
             p.price,
-            p.address,
             p.description,
             p.image,
             p.contact_number,
@@ -306,7 +264,10 @@ def buyer_properties():
             u.username,
             p.owner_id,
             p.type,
-            p.deal_type
+            p.deal_type,
+            p.state,
+            p.city,
+            p.area
         FROM properties p
         JOIN users u ON p.owner_id = u.id
     """)  
@@ -333,20 +294,6 @@ def home():
     conn.close()
     
     return render_template("home.html" , user= user)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -445,6 +392,5 @@ def logout():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
 
 
