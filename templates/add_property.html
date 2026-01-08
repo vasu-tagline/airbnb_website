@@ -1,50 +1,166 @@
-<h2>Add Property</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Add Property</title>
 
-<form method="post" enctype="multipart/form-data">
-    
-    
-    <input type="text" name="title" placeholder="Property Title" required><br><br>
-    
-    <select name="type" required>
-        <option value="">Select Type</option>
-        <option value="apartment">Apartment</option>
-        <option value="house">House</option>
-    </select><br><br>
+<style>
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
 
-    <input type="number" name="price" placeholder="Price" required><br><br>
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #eef2f3, #dfe9f3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
 
-    <textarea name="description" placeholder="Description"></textarea><br><br>
+/* CARD */
+.form-card {
+    width: 100%;
+    max-width: 700px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    padding: 30px;
+}
 
-    <input type="text" name="mobile" placeholder="CONTACT NO" required><br><br>
+/* HEADER */
+.form-card h2 {
+    margin-bottom: 25px;
+    color: #2c3e50;
+    text-align: center;
+}
 
-    <!-- IMAGE FIELD -->
-    
-    <input type="file" name="image" required><br><br>
-    
-    <select name="deal_type" required>
-        <option value="">Deal_Type</option>
-        <option value="sale">Sale</option>
-        <option value="rent">Rent</option>
-    </select><br><br>  
-    
+/* FORM GRID */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 18px;
+}
 
+/* INPUTS */
+input, select, textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    outline: none;
+}
 
-    <label>State :</label>
-<select name="state" id="state" onchange="loadCities()" required>
-    <option value="">Select State</option>
-    <option value="Gujarat">Gujarat</option>
-    <option value="Rajasthan">Rajasthan</option>
-</select><br><br>
+textarea {
+    resize: none;
+    height: 90px;
+}
 
-<label>City :</label>
-<select name="city" id="city" onchange="loadAreas()" required>
-    <option value="">Select City</option>
-</select><br><br>
+input:focus, select:focus, textarea:focus {
+    border-color: #3498db;
+}
 
-<label>Area :</label>
-<select name="area" id="area" required>
-    <option value="">Select Area</option>
-</select>
+/* FULL WIDTH */
+.full {
+    grid-column: 1 / -1;
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: #3498db;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #2c80b4;
+}
+
+/* FILE INPUT */
+input[type="file"] {
+    padding: 8px;
+}
+
+/* SECTION TITLE */
+.section-title {
+    grid-column: 1 / -1;
+    font-weight: bold;
+    color: #555;
+    margin-top: 10px;
+}
+
+@media(max-width: 600px) {
+    body {
+        padding: 15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="form-card">
+    <h2>🏡 Add New Property</h2>
+
+    <form method="post" enctype="multipart/form-data">
+
+        <div class="form-grid">
+
+            <input type="text" name="title" placeholder="Property Title" required>
+
+            <select name="type" required>
+                <option value="">Select Property Type</option>
+                <option value="apartment">Apartment</option>
+                <option value="house">House</option>
+            </select>
+
+            <input type="number" name="price" placeholder="Price" required>
+
+            <input type="text" name="mobile" placeholder="Contact Number" required>
+
+            <select name="deal_type" required>
+                <option value="">Deal Type</option>
+                <option value="sale">Sale</option>
+                <option value="rent">Rent</option>
+            </select>
+
+            <input type="file" name="image" required>
+
+            <textarea name="description" class="full" placeholder="Property Description"></textarea>
+
+            <div class="section-title">📍 Location Details</div>
+
+            <select name="state" id="state" onchange="loadCities()" required>
+                <option value="">Select State</option>
+                <option value="Gujarat">Gujarat</option>
+                <option value="Rajasthan">Rajasthan</option>
+            </select>
+
+            <select name="city" id="city" onchange="loadAreas()" required>
+                <option value="">Select City</option>
+            </select>
+
+            <select name="area" id="area" required>
+                <option value="">Select Area</option>
+            </select>
+
+            <div class="full">
+                <button type="submit">➕ Add Property</button>
+            </div>
+
+        </div>
+    </form>
+</div>
 
 <script>
 const data = {
@@ -88,9 +204,7 @@ function loadAreas() {
     }
 }
 </script>
- 
 
-   <br><br>
-    <button type="submit">Add Property</button>
 
-</form>
+</body>
+</html>

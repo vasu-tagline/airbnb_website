@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Property Details</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+            margin: 30px;
+        }
+
+        .card {
+            background: white;
+            width: 600px;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        p {
+            margin: 6px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+
+
+<div class="card">
+
+    <img src="{{ url_for('static', filename='uploads/' + property[4]) }}">
+    
+    <p><strong>Property_id:</strong> {{ property[0] }}</p>
+    <p><strong>Price:</strong> ₹{{ property[2] }}</p>
+    <p><strong>Description:</strong> {{ property[3] }}</p>
+    <p><strong>Contact:</strong> {{ property[5] }}</p>
+    <p><strong>Status:</strong> {{ property[6] }}</p>
+    <p><strong>Owner:</strong> {{ property[7] }}</p>
+    <p><strong>Type:</strong> {{ property[8] }}</p>
+    <p><strong>Deal:</strong> {{ property[9] }}</p>
+    <p><strong>State:</strong> {{ property[10] }}</p>
+    <p><strong>City:</strong> {{ property[11] }}</p>
+    <p><strong>Area:</strong> {{ property[12] }}</p>
+
+    <br>
+
+    
+
+</div>
+
+<h2><a href="/payment">Payment Now</a></h2>
+
+<br><br>
+<a href="/buyer/properties">⬅ Back to Properties</a>
+</body>
+</html>

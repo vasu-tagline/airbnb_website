@@ -1,33 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* 🌈 Animated Background */
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #eef2f3, #dfe9f3, #cfe3f3);
+    background-image: url("/static/uploads/login.jpg"); /* ← put your image here */
+    background-size: 300% 300%;
+    animation: bgMove 10s ease infinite;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+@keyframes bgMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* CARD */
+.form-card {
+    width: 100%;
+    max-width: 450px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    padding: 30px;
+}
+
+/* HEADER */
+.form-card h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #1f2937;
+}
+
+/* FORM FIELDS */
+label {
+    font-size: 14px;
+    color: #374151;
+    display: block;
+    margin-bottom: 6px;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    margin-bottom: 18px;
+    outline: none;
+}
+
+input:focus, select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* BUTTON */
+input[type="submit"] {
+    width: 100%;
+    background: #2563eb;
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+input[type="submit"]:hover {
+    background: #1d4ed8;
+}
+
+/* LINKS */
+.links {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.links a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
+
+@media(max-width: 500px) {
+    body {
+        padding: 15px;
+    }
+}
+</style>
 </head>
+
 <body>
+
+<div class="form-card">
+    <h2>📝 Register</h2>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div style="background:#fee2e2; color:#991b1b; padding:10px; border-radius:8px; text-align:center; margin-bottom:15px;">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <form action="/register" method="post">
 
-        <label>Select Role:</label><br>
+        <label>Select Role:</label>
         <select name="user_type" required>
-            <option  value="">-- Select --</option>
-            <option name="role" value="owner">Owner</option>
-            <option name="role" value="buyer">Buyer</option>
-        </select><br><br>
-    
+            <option value="">-- Select --</option>
+            <option value="owner">Owner</option>
+            <option value="buyer">Buyer</option>
+        </select>
 
-        <label>Enter a Name:</label><br>
-        <input type="text" name="username" required><br><br>
-    
-        <label>Enter a Password:</label><br>
-        <input type="password" name="password" required><br><br>
-       
-        <label>Enter a Email:</label><br>
-        <input type="email" name="email" required><br><br>
-        
+        <label>Enter Name:</label>
+        <input type="text" name="username" required>
+
+        <label>Enter Password:</label>
+        <input type="password" name="password" required>
+
+        <label>Enter Email:</label>
+        <input type="email" name="email" required>
+
         <input type="submit" value="Register">
-         
-        <br><br><br><br><br>
-    </form>    
+
+        <div class="links">
+            Already have an account? <a href="/login">Login here</a>
+        </div>
+
+    </form>
+</div>
+
 </body>
 </html>

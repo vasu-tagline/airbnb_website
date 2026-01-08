@@ -1,97 +1,169 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>My Properties</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        /* 🔥 CLEARLY VISIBLE ANIMATED BACKGROUND */
         body {
-            font-family: Arial, sans-serif;
-            background: #f2f2f2;
-            margin: 20px;
+            margin: 0;
+            padding: 30px;
+            min-height: 100vh;
+
+            background: linear-gradient(
+                120deg,
+                #dbeafe,
+                #f0f9ff,
+                #e0e7ff,
+                #cffafe
+            );
+            background-size: 300% 300%;
+            animation: bgMove 8s ease-in-out infinite;
+        }
+
+        @keyframes bgMove {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         h2 {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            color: #1f2937;
         }
 
         /* GRID */
         .properties-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, 420px);
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
             gap: 25px;
-            justify-content: start;
         }
 
         /* CARD */
         .property-card {
-            width: 420px;
-            height: 430px;
-            background: #fff;
-            border-radius: 10px;
-            border: 1px solid #ddd;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            background: white;
+            border-radius: 14px;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* IMAGE BOX (FIXED SIZE) */
+        .property-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.18);
+        }
+
+        /* IMAGE */
         .image-box {
-            width: 420px;
-            height: 180px;
+            position: relative;
+            height: 200px;
             overflow: hidden;
         }
 
         .image-box img {
-            width: 420px;
-            height: 180px;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            display: block;
         }
 
-        /* CONTENT */
+        .badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: #2563eb;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* BODY */
         .property-body {
-            padding: 15px;
-            flex: 1;
+            padding: 18px;
         }
 
         .property-title {
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 600;
             margin-bottom: 8px;
+            color: #1f2937;
         }
 
-        .property-body p {
-            margin: 4px 0;
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #16a34a;
+            margin-bottom: 10px;
+        }
+
+        .info {
             font-size: 14px;
+            color: #374151;
+            margin: 4px 0;
+        }
+
+        .location {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #6b7280;
         }
 
         /* ACTIONS */
         .property-actions {
-            padding: 12px 15px;
-            border-top: 1px solid #eee;
-            text-align: right;
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 18px;
+            border-top: 1px solid #e5e7eb;
+            background: #f9fafb;
         }
 
         .property-actions a {
             text-decoration: none;
-            font-weight: bold;
-            margin-left: 10px;
+            font-weight: 600;
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            color: white;
         }
 
         .edit {
-            color: #007bff;
+            background: #2563eb;
         }
 
         .delete {
-            color: red;
+            background: #dc2626;
+        }
+
+        .property-actions a:hover {
+            opacity: 0.9;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 25px;
+            text-decoration: none;
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<h2>My Properties</h2>
+<h2>🏘️ My Properties</h2>
 
 {% if properties %}
 <div class="properties-grid">
@@ -101,41 +173,39 @@
 
         <div class="image-box">
             <img src="{{ url_for('static', filename='uploads/' + p[6]) }}">
+            <div class="badge">{{ p[9]|upper }}</div>
         </div>
 
         <div class="property-body">
             <div class="property-title">{{ p[2] }}</div>
+            <div class="price">₹ {{ p[4] }}</div>
 
-            <p><strong>Type:</strong> {{ p[3] }}</p>
-            <p><strong>Price:</strong> ₹{{ p[4] }} </p>
-            <p><strong>Address:</strong> {{ p[5] }}</p>
-            <p><strong>Contact:</strong> {{ p[7] }}</p>
-            <p><strong>Status:</strong> {{ p[8] }}</p>
-            <p><strong>Owner_id:</strong> {{ p[1] }}</p>
-            <p><strong>Deal_type:</strong> {{ p[9] }}</p>
-            <p><strong>State:</strong> {{ p[10] }}</p>
-            <p><strong>City:</strong> {{ p[11] }}</p>
-            <p><strong>area:</strong> {{ p[12] }}</p>
+            <div class="info">🏠 Type: {{ p[3] }}</div>
+            <div class="info">📞 Contact: {{ p[7] }}</div>
+            <div class="info">📌 Status: {{ p[8] }}</div>
+
+            <div class="location">
+                📍 {{ p[12] }}, {{ p[11] }}, {{ p[10] }}
+            </div>
         </div>
 
-    <div class="property-actions">
-             <a href="{{ url_for('edit_property', property_id=p[0]) }}" class="edit">Edit</a>
-             <a href="{{ url_for('delete_property', property_id=p[0]) }}"
-             class="delete"
-             onclick="return confirm('Are you sure you want to delete this property?');">
-             Delete
-             </a>
+        <div class="property-actions">
+            <a href="{{ url_for('edit_property', property_id=p[0]) }}" class="edit">Edit</a>
+            <a href="{{ url_for('delete_property', property_id=p[0]) }}"
+               class="delete"
+               onclick="return confirm('Are you sure you want to delete this property?');">
+               Delete
+            </a>
         </div>
+
     </div>
     {% endfor %}
-
 </div>
 {% else %}
 <p>No properties added yet.</p>
 {% endif %}
 
-<br>
-<a href="/owner/dashboard">⬅ Back to Dashboard</a>
+<a href="/owner/dashboard" class="back">⬅ Back to Dashboard</a>
 
 </body>
 </html>

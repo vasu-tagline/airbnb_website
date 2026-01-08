@@ -2,9 +2,11 @@ from flask import Flask , render_template ,request,redirect,url_for,session,flas
 import sqlite3
 import os
 from werkzeug.utils import secure_filename
+from flask_mail import Mail,Message
+import random
 
-
-
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = "my_super_secret_key"
@@ -12,6 +14,22 @@ app.secret_key = "my_super_secret_key"
 
 UPLOAD_FOLDER = "static/uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+
+USER = os.getenv('MAIL_ID')
+PASS = os.getenv('MAIL_PASSWORD')
+
+
+# Mail configuration
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = USER
+app.config['MAIL_PASSWORD'] = PASS
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_DEFAULT_SENDER'] = USER
+
+
+mail = Mail(app)
 
 @app.after_request
 def add_global_headers(response):
@@ -157,10 +175,25 @@ def owner_dashboard():
     return render_template("owner_dashboard.html")
 
 
-
 @app.route("/buyer/dashboard")
 def buyer_dashboard():
-    return render_template("buyer_dashboard.html")
+    if "user" not in session or session.get("role") != "buyer":
+        return redirect(url_for("login"))
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT id, role, username, password , email
+        FROM users
+        WHERE username = ?
+    """, (session["user"],))
+
+    buyer = cursor.fetchone()
+    conn.close()
+
+    return render_template("buyer_dashboard.html", buyer=buyer)
+
 
 
 
@@ -241,20 +274,22 @@ def my_properties():
     return render_template("my_properties.html", properties=properties)
 
 
-
-
 @app.route("/buyer/properties")
 def buyer_properties():
-    # 🔐 Only buyer allowed
     if "user" not in session or session.get("role") != "buyer":
         return redirect(url_for("login"))
-    
-    #badhu ley database mathi...
+
+    state = request.args.get("state")
+    city = request.args.get("city")
+    deal_type = request.args.get("deal_type")
+    max_price = request.args.get("max_price")
+
     conn = get_db()
     cursor = conn.cursor()
 
-    cursor.execute("""
+    query = """
         SELECT 
+            p.id,
             p.title,
             p.price,
             p.description,
@@ -270,14 +305,78 @@ def buyer_properties():
             p.area
         FROM properties p
         JOIN users u ON p.owner_id = u.id
-    """)  
-    # cursor.execute("""SELECT * FROM properties """)
-  
+        WHERE 1=1
+    """
+
+    params = []
+
+    if state:
+        query += " AND p.state = ?"
+        params.append(state)
+
+    if city:
+        query += " AND p.city = ?"
+        params.append(city)
+
+    if deal_type:
+        query += " AND p.deal_type = ?"
+        params.append(deal_type)
+
+    if max_price:
+        query += " AND p.price <= ?"
+        params.append(max_price)
+
+    cursor.execute(query, params)
     properties = cursor.fetchall()
     conn.close()
 
-    return render_template("buyer_properties.html", properties=properties)
+    return render_template(
+        "buyer_properties.html",
+        properties=properties,
+        state=state,
+        city=city,
+        deal_type=deal_type,
+        max_price=max_price
+    )
 
+
+@app.route("/property/<int:property_id>")
+def property_details(property_id):
+    
+    
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT 
+            p.id,
+            p.title,
+            p.price,
+            p.description,
+            p.image,
+            p.contact_number,
+            p.status,
+            u.username,
+            p.type,
+            p.deal_type,
+            p.state,
+            p.city,
+            p.area
+        FROM properties p
+        JOIN users u ON p.owner_id = u.id
+        WHERE p.id = ?
+    """, (property_id,))
+
+    property = cursor.fetchone()
+    conn.close()
+
+    return render_template("property_details.html", property=property)
+
+
+@app.route("/payment")
+def payment():
+    return render_template("success.html")
 
 @app.route("/home")
 def home():
@@ -296,11 +395,72 @@ def home():
     return render_template("home.html" , user= user)
 
 
+@app.route('/forgotpassword', methods=['GET', 'POST'])
+def forgotpassword():
+    if request.method == 'POST':
+        email = request.form.get('email')
+
+        otp = random.randint(100000, 999999)
+
+        body = f"Your OTP is {otp}"
+        subject = "Forgot Password"
+
+        msg = Message(
+            subject=subject,
+            sender=app.config['MAIL_USERNAME'],
+            recipients=[email]
+        )
+        msg.body = body
+        mail.send(msg)
+
+        session['otp'] = otp
+        session['email'] = email
+
+        return redirect(url_for('otppage'))
+
+    return render_template('forgotpassword.html')
 
 
 
+@app.route('/otppage', methods=['GET', 'POST'])
+def otppage():
+    if request.method == 'POST':
+        user_otp = request.form.get('otp')
+        saved_otp = session.get('otp')
+
+        if saved_otp and int(user_otp) == saved_otp:
+            return redirect(url_for('changepassword'))
+        else:
+            return "Wrong OTP"
+
+    return render_template('otppage.html')
 
 
+@app.route('/changepassword', methods=['GET', 'POST'])
+def changepassword():
+    if request.method == 'POST':
+        password = request.form.get('password')
+        email = session.get('email')
+
+        if not email:
+            return "Session expired. Try again."
+
+        # Connect to DB
+        conn = get_db()
+        cursor = conn.cursor()
+
+        # Update password for the user with this email
+        cursor.execute("UPDATE users SET password = ? WHERE email = ?", (password, email))
+        conn.commit()
+        conn.close()
+
+        # Clear session
+        session.pop('otp', None)
+        session.pop('email', None)
+
+        return redirect(url_for('login'))
+
+    return render_template('changepassword.html')
 
 
 
@@ -335,14 +495,14 @@ def edit_property(property_id):
     if request.method == "POST":
         title = request.form["title"]
         price = request.form["price"]
-        address = request.form["address"]
+        contact_number = request.form["contact_number"]
         description = request.form["description"]
 
         cursor.execute("""
             UPDATE properties
-            SET title=?, price=?, address=?, description=?
+            SET title=?, price=?, contact_number=?, description=?
             WHERE id=?
-        """, (title, price, address, description, property_id))
+        """, (title, price, contact_number, description, property_id))
 
         conn.commit()
         conn.close()

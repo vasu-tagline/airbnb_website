@@ -1,23 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Owner Dashboard</title>
 
-<h2>Owner Dashboard</h2>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
 
+        body {
+            min-height: 100vh;
+            background:
+                linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+                url("/static/uploads/images2.jpg"); /* ← put your image here */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    <a href="/add-property" >
-         ~ Add Property
-    </a>
-     
-    <br><br>
-    
-    <a href="/my-properties" >
-         ~ My Properties
-    </a>
-     
-    <br><br>
-    <a href="/logout" >
-     ~ Logout
-</a>
- 
-<br><br>
-</div>
+        .dashboard {
+            width: 420px;
+            padding: 35px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.4);
+            text-align: center;
+            color: #fff;
+        }
 
+        .dashboard h2 {
+            font-size: 30px;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
 
+        .dashboard a {
+            display: block;
+            text-decoration: none;
+            color: #fff;
+            font-size: 17px;
+            padding: 16px;
+            margin: 15px 0;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #1abc9c, #16a085);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard a:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+        }
+
+        .dashboard a.logout {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .subtitle {
+            font-size: 14px;
+            opacity: 0.85;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 500px) {
+            .dashboard {
+                width: 90%;
+            }
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="dashboard">
+
+        <h2>🏠 Owner Dashboard</h2>
+
+        <a href="/add-property">
+            ➕ Add Property
+        </a>
+
+        <a href="/my-properties">
+            📋 My Properties
+        </a>
+
+        <a href="/logout" class="logout">
+            🚪 Logout
+        </a>
+
+        <div class="subtitle">
+            Manage your properties professionally
+        </div>
+
+    </div>
+
+</body>
+</html>

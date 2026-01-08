@@ -3,34 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        /* 🌈 Animated Background */
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef2f3, #dfe9f3, #cfe3f3);
+            background-image: url("/static/uploads/login.jpg"); /* ← put your image here */
+            background-size: 300% 300%;
+            animation: bgMove 10s ease infinite;
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+
+        @keyframes bgMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* LOGIN CARD */
+        .login-card {
+            width: 380px;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            .login-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(6px);
+        }
+
+        }
+
+        .login-card h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #1f2937;
+        }
+
+        /* FLASH MESSAGE */
+        .flash {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* FORM */
+        label {
+            font-size: 14px;
+            color: #374151;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            margin-bottom: 18px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            background: #2563eb;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background: #1d4ed8;
+        }
+
+        /* LINKS */
+        .links {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .links a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 420px) {
+            .login-card {
+                width: 90%;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
 
-    <form action="/login" method="post">
-        <label>Username:</label><br>
-        <input type="text" name="username" required><br><br>
-    
-        <label>Password:</label><br>
-        <input type="password" name="password" required><br><br>
-        
-        <input type="submit" value="Login">
+    <div class="login-card">
+        <h2>🔐 Login</h2>
 
-        <br><br><br><br><br>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
-        <p>
-            If you are first time, then :
-            <a href="/register">REGISTER</a>
-        </p>
-        
-    </form>    
+        <form action="/login" method="post">
+
+            <label>Username</label>
+            <input type="text" name="username" required>
+
+            <label>Password</label>
+            <input type="password" name="password" required>
+
+            <input type="submit" value="Login">
+
+            <div class="links">
+                <p><a href="/forgotpassword">Forgot password?</a></p>
+                <p>
+                    New user?
+                    <a href="/register">Register here</a>
+                </p>
+            </div>
+
+        </form>
+    </div>
 
 </body>
 </html>

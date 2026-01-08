@@ -1,137 +1,242 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>All Properties</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Available Properties</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f2f2f2;
-            margin: 20px;
-        }
+<style>
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
 
-        h2 {
-            margin-bottom: 20px;
-        }
+body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 30px;
+    background: linear-gradient(135deg, #eef2f3, #d9e6f2, #c0d6f1);
+}
 
-        /* GRID */
-        .properties-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, 420px);
-            gap: 25px;
-            justify-content: start;
-        }
+/* HEADER */
+h2 {
+    color: #1f2937;
+    margin-bottom: 25px;
+    text-align: center;
+}
 
-        /* CARD */
-        .property-card {
-            width: 420px;
-            height: 460px;
-            background: #fff;
-            border-radius: 10px;
-            border: 1px solid #ddd;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
+/* FILTER BAR */
+.filter-bar {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
 
-         /* IMAGE BOX (FIXED SIZE) */
-        .image-box {
-            width: 420px;
-            height: 180px;
-            overflow: hidden;
-        }
+.filter-bar select,
+.filter-bar input {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+}
 
-        .image-box img {
-            width: 420px;
-            height: 180px;
-            object-fit: cover;
-            display: block;
-        }
+.filter-bar button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
 
-        /* CONTENT */
-        .property-body {
-            padding: 15px;
-            flex: 1;
-        }
+.filter-bar button:hover {
+    background: #1d4ed8;
+}
 
-        .property-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
+.filter-bar a {
+    text-decoration: none;
+    color: #2563eb;
+    font-weight: bold;
+    padding: 10px 12px;
+}
 
-        .property-body p {
-            margin: 4px 0;
-            font-size: 14px;
-        }
+/* GRID */
+.properties-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 25px;
+}
 
-        /* OWNER */
-        .owner {
-            font-style: italic;
-            color: #555;
-        }
+/* PROPERTY CARD */
+.property-card {
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
 
-        /* ACTIONS */
-        .property-actions {
-            padding: 12px 15px;
-            border-top: 1px solid #eee;
-            text-align: right;
-        }
+.property-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 18px 45px rgba(0,0,0,0.15);
+}
 
-        .property-actions a {
-            text-decoration: none;
-            font-weight: bold;
-            color: #007bff;
-        }
-    </style>
+/* IMAGE */
+.image-box {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #2563eb;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/* PROPERTY BODY */
+.property-body {
+    padding: 18px;
+}
+
+.property-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 10px;
+}
+
+.property-info {
+    font-size: 14px;
+    color: #374151;
+    margin: 4px 0;
+}
+
+.property-info strong {
+    color: #2563eb;
+}
+
+.property-actions {
+    margin-top: 12px;
+}
+
+.property-actions button {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.property-actions button:hover {
+    background: #1e8449;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 25px;
+    text-decoration: none;
+    color: #2563eb;
+    font-weight: bold;
+}
+</style>
 </head>
 
 <body>
 
-<h2>Available Properties</h2>
+<h2>🏡 Available Properties</h2>
+
+<!-- FILTER FORM -->
+<form method="get" class="filter-bar">
+
+    <select name="state">
+        <option value="">Select State</option>
+        <option value="Gujarat" {{ 'selected' if state == 'Gujarat' else '' }}>Gujarat</option>
+        <option value="Rajasthan" {{ 'selected' if state == 'Rajasthan' else '' }}>Rajasthan</option>
+    </select>
+
+    <select name="city">
+        <option value="">Select City</option>
+        <option value="Surat" {{ 'selected' if city == 'Surat' else '' }}>Surat</option>
+        <option value="Ahmedabad" {{ 'selected' if city == 'Ahmedabad' else '' }}>Ahmedabad</option>
+        <option value="Jaipur" {{ 'selected' if city == 'Jaipur' else '' }}>Jaipur</option>
+    </select>
+
+    <select name="deal_type">
+        <option value="">Deal Type</option>
+        <option value="sale" {{ 'selected' if deal_type == 'sale' else '' }}>Sale</option>
+        <option value="rent" {{ 'selected' if deal_type == 'rent' else '' }}>Rent</option>
+    </select>
+
+    <input type="number" name="max_price" placeholder="Max Price" value="{{ max_price or '' }}">
+
+    <button type="submit">Search</button>
+    <a href="/buyer/properties">Reset</a>
+</form>
 
 {% if properties %}
 <div class="properties-grid">
 
-     {% for p in properties %}
-     <div class="property-card">
+{% for p in properties %}
+<div class="property-card">
 
-        <!-- IMAGE -->
-        <div class="image-box">
-            <img src="{{ url_for('static', filename='uploads/' + p[3]) }}" alt="Property Image">
-        </div>
-
-        <!-- CONTENT -->
-        <div class="property-body">
-            <div class="property-title">{{ p[0] }}</div>
-
-            <p><strong>Price:</strong> ₹{{ p[1] }}</p>
-            <p><strong>Description:</strong> {{ p[2] }}</p>
-            <p><strong>Contact:</strong> {{ p[4] }}</p>
-            <p><strong>Status:</strong> {{ p[5] }}</p>
-
-            <p class="owner">
-                <strong>Owner:</strong> {{ p[6] }}
-            </p>
-
-            <p><strong>Owner ID:</strong> {{ p[7] }}</p>
-            <p><strong>Type:</strong> {{ p[8] }}</p>
-            <p><strong>Deal Type:</strong> {{ p[9] }}</p>
-            <p><strong>State:</strong> {{ p[10] }}</p>
-            <p><strong>City:</strong> {{ p[11] }}</p>
-            <p><strong>Area:</strong> {{ p[12] }}</p>
-        </div>
- 
+    <div class="image-box">
+        <img src="{{ url_for('static', filename='uploads/' + p[4]) }}">
+        <div class="badge">{{ p[10]|capitalize }}</div>
     </div>
+
+    <div class="property-body">
+        <div class="property-title">{{ p[1] }}</div>
+        
+        <p class="property-info"><strong>Owner:</strong> {{ p[7] }}</p>
+        <p class="property-info"><strong>Type:</strong> {{ p[9] }}</p>
+        <p class="property-info"><strong>Price:</strong> ₹{{ p[2] }}</p>
+        <p class="property-info"><strong>Status:</strong> {{ p[6] }}</p>
+        <p class="property-info"><strong>Description:</strong> {{ p[3] }}</p>
+        <p class="property-info"><strong>Contact:</strong> {{ p[5] }}</p>
+        <p class="property-info"><strong>Location:</strong> {{ p[13] }}, {{ p[12] }}, {{ p[11] }}</p>
+
+        <div class="property-actions">
+            <a href="{{ url_for('property_details', property_id=p[0]) }}">
+                <button type="button">
+                    {% if p[10] == 'sale' %}Buy{% else %}Rent{% endif %}
+                </button>
+            </a>
+        </div>
+    </div>
+
+</div>
 {% endfor %}
- 
 
 </div>
 {% else %}
-<p>No properties available.</p>
+<p>No properties found.</p>
 {% endif %}
 
-<a href="/buyer/dashboard">⬅ Back to Dashboard</a>
+<a href="/buyer/dashboard" class="back-link">⬅ Back to Dashboard</a>
+
 </body>
 </html>

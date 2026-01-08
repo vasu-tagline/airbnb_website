@@ -1,9 +1,148 @@
-<h2>Buyer Dashboard</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buyer Dashboard</title>
 
-<p>Welcome {{ session.user }}</p>
+<style>
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
 
-<ul>
-    <li><a href="/buyer/properties">View All Properties</a><br><br></li>
-    
-    <li><a href="/logout">Logout</a></li>
-</ul>
+/* BODY WITH ANIMATED GRADIENT */
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(270deg, #a1c4fd, #c2e9fb, #f0f9ff, #d9e6f2);
+    background-size: 800% 800%;
+    animation: gradientBG 15s ease infinite;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Gradient Animation */
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* FLOATING SHAPES */
+.shape {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: float 20s linear infinite;
+    z-index: 0;
+}
+
+.shape1 { width: 120px; height: 120px; background: #ffffff; top: 10%; left: 20%; animation-delay: 0s; }
+.shape2 { width: 80px; height: 80px; background: #dbeafe; top: 70%; left: 10%; animation-delay: 5s; }
+.shape3 { width: 150px; height: 150px; background: #93c5fd; top: 30%; left: 75%; animation-delay: 10s; }
+
+@keyframes float {
+    0% { transform: translateY(0px) translateX(0px); }
+    50% { transform: translateY(-40px) translateX(20px); }
+    100% { transform: translateY(0px) translateX(0px); }
+}
+
+/* DASHBOARD CARD */
+.dashboard-card {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(6px);
+    width: 100%;
+    max-width: 500px;
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 18px 45px rgba(0,0,0,0.18);
+    margin-top: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.dashboard-card h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #1f2937;
+    font-size: 28px;
+}
+
+.dashboard-card p {
+    font-size: 16px;
+    margin: 12px 0;
+    color: #374151;
+}
+
+.dashboard-card p strong {
+    color: #2563eb;
+}
+
+/* BUTTONS / LINKS */
+.dashboard-links {
+    margin-top: 25px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+}
+
+.dashboard-links a {
+    text-decoration: none;
+    background: #2563eb;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.dashboard-links a:hover {
+    background: #1d4ed8;
+}
+
+@media(max-width: 500px) {
+    .dashboard-card {
+        padding: 20px;
+    }
+
+    .dashboard-links a {
+        width: 100%;
+        text-align: center;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- FLOATING SHAPES -->
+<div class="shape shape1"></div>
+<div class="shape shape2"></div>
+<div class="shape shape3"></div>
+
+<h2>👤 Buyer Dashboard</h2>
+
+<div class="dashboard-card">
+    <p><strong>Buyer ID:</strong> {{ buyer[0] }}</p>
+    <p><strong>Role:</strong> {{ buyer[1] }}</p>
+    <p><strong>Username:</strong> {{ buyer[2] }}</p>
+    <p><strong>Password:</strong> {{ buyer[3] }}</p>
+    <p><strong>Email:</strong> {{ buyer[4] }}</p>
+</div>
+
+<div class="dashboard-links">
+    <a href="/buyer/properties">🏠 View All Properties</a>
+    <a href="/logout">🚪 Logout</a>
+</div>
+
+</body>
+</html>
