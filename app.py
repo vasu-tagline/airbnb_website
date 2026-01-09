@@ -40,9 +40,8 @@ def add_global_headers(response):
 
    
     
-# ----> DATABASE 
 def get_db():
-    return sqlite3.connect("users.db")
+    return sqlite3.connect("users.db", timeout=10)  # wait 10 seconds if locked
 
 
 def create_table():
@@ -470,48 +469,36 @@ def edit_property(property_id):
     if "user" not in session or session.get("role") != "owner":
         return redirect(url_for("login"))
 
-    conn = get_db()
-    cursor = conn.cursor()
+    with get_db() as conn:
+        cursor = conn.cursor()
 
-    # get owner id
-    cursor.execute(
-        "SELECT id FROM users WHERE username=?",
-        (session["user"],)
-    )
-    owner_id = cursor.fetchone()[0]
+        # get owner id
+        cursor.execute("SELECT id FROM users WHERE username=?", (session["user"],))
+        owner_id = cursor.fetchone()[0]
 
-    # get property 
-    cursor.execute("""
-        SELECT * FROM properties
-        WHERE id=? AND owner_id=?
-    """, (property_id, owner_id))
+        # get property
+        cursor.execute("SELECT * FROM properties WHERE id=? AND owner_id=?", (property_id, owner_id))
+        property = cursor.fetchone()
 
-    property = cursor.fetchone()
+        if not property:
+            return "Unauthorized access", 403
 
-    if not property:
-        conn.close()
-        return "Unauthorized access", 403
+        if request.method == "POST":
+            title = request.form["title"]
+            price = request.form["price"]
+            contact_number = request.form["contact_number"]
+            description = request.form["description"]
 
-    if request.method == "POST":
-        title = request.form["title"]
-        price = request.form["price"]
-        contact_number = request.form["contact_number"]
-        description = request.form["description"]
+            cursor.execute("""
+                UPDATE properties
+                SET title=?, price=?, contact_number=?, description=?
+                WHERE id=?
+            """, (title, price, contact_number, description, property_id))
+            conn.commit()
 
-        cursor.execute("""
-            UPDATE properties
-            SET title=?, price=?, contact_number=?, description=?
-            WHERE id=?
-        """, (title, price, contact_number, description, property_id))
+            return redirect(url_for("my_properties"))
 
-        conn.commit()
-        conn.close()
-
-        return redirect(url_for("my_properties"))
-
-    conn.close()
     return render_template("edit_property.html", property=property)
-
 
 
 
@@ -552,5 +539,7 @@ def logout():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
 
 
