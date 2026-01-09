@@ -119,7 +119,6 @@ PRACTICE_/
 | -------------- | -------------------- |
 | Backend        | Flask                |
 | Database       | SQLite               |
-| ORM            | ❌ Not used (Raw SQL) |
 | Templates      | Jinja2               |
 | Frontend       | HTML, CSS            |
 | Authentication | Flask Sessions       |
