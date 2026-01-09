@@ -131,7 +131,7 @@ PRACTICE_/
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
+git clone https://github.com/vasudevgotagline-star/airbnb_website.git
 cd your-repo-name
 ```
 
