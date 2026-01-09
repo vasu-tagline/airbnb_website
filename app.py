@@ -38,7 +38,7 @@ def add_global_headers(response):
     response.headers["Expires"] = "0"
     return response
 
-    
+   
     
 # ----> DATABASE 
 def get_db():
@@ -246,7 +246,7 @@ def add_property():
 
 @app.route("/my-properties")
 def my_properties():
-    # 🔐 Only owner allowed
+    # Only owner allowed
     if "user" not in session or session.get("role") != "owner":
         return redirect(url_for("login"))
 
@@ -255,14 +255,14 @@ def my_properties():
     conn = get_db()
     cursor = conn.cursor()
 
-    # 1️⃣ get owner id
+    # get owner id
     cursor.execute(
         "SELECT id FROM users WHERE username=?",
         (session["user"],)
     )
     owner_id = cursor.fetchone()[0]
 
-    # 2️⃣ get owner's properties
+    # get owner's properties
     cursor.execute("""
         SELECT * FROM properties
         WHERE owner_id=?
@@ -480,7 +480,7 @@ def edit_property(property_id):
     )
     owner_id = cursor.fetchone()[0]
 
-    # get property (ONLY if it belongs to owner)
+    # get property 
     cursor.execute("""
         SELECT * FROM properties
         WHERE id=? AND owner_id=?
