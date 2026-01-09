@@ -164,10 +164,11 @@ pip install -r requirements.txt
 Create a `.env` file in the project root:
 
 ```env
-FLASK_SECRET_KEY=your_secret_key_here
+MAIL_ID=vasudevgo.tagline@gmail.com
+MAIL_PASSWORD=your_email_app_password
 ```
 
-⚠️ `.env` is excluded from GitHub for security reasons.
+⚠️ Do not commit .env to Git it contains senitive information.
 
 ---
 
