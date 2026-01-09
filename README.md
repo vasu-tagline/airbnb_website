@@ -178,19 +178,6 @@ FLASK_SECRET_KEY=your_secret_key_here
 * This project uses **SQLite (`users.db`)**
 * The database file is **included in the repository**
 
-When someone clones the project:
-
-* They can log in using **existing credentials**
-* Registration is optional (for creating new users)
-
-📌 This approach is useful for:
-
-* Demo projects
-* Learning purposes
-* Testing features with pre-filled data
-
-⚠️ **Note:**
-This setup is **not recommended for production**, but is acceptable for practice and learning.
 
 ---
 
