@@ -101,27 +101,42 @@ def login():
 
 
 
-@app.route("/register" , methods = ['GET', 'POST'])
+@app.route("/register", methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        #username, pass lai lyo
         username = request.form['username']
         password = request.form['password']
         role = request.form['user_type']
         email = request.form['email']
-        
-        #data base ma nakhi devanu
+
         conn = get_db()
         cursor = conn.cursor()
+
+        # Check if username or email already exists
         cursor.execute(
-            "INSERT INTO users (role, username, password , email) VALUES (?, ?, ?, ?)",
-            (role, username, password , email)
+            "SELECT id FROM users WHERE username = ? OR email = ?",
+            (username, email)
         )
+        existing_user = cursor.fetchone()
+
+        if existing_user:
+            flash("Username or Email already exists. Please choose another.")
+            conn.close()
+            return redirect(url_for('register'))
+
+        # Insert new user
+        cursor.execute(
+            "INSERT INTO users (role, username, password, email) VALUES (?, ?, ?, ?)",
+            (role, username, password, email)
+        )
+
         conn.commit()
-        conn.close()    
+        conn.close()
+        flash("Registration successful. Please login.")
         return redirect(url_for('login'))
-        
+
     return render_template("register.html")
+
 
 
 
