@@ -244,8 +244,7 @@ http://127.0.0.1:5000
 
 ## 👨‍💻 Author
 
-**Vasudev Gol**
-Flask Developer *(Learning Phase 🚀)*
+Vasudev Gol Github => https://github.com/vasudevgotagline-star
 
 ⭐ *If this project helped you, consider giving it a star on GitHub!*
 
