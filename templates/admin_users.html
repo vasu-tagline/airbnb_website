@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin - Manage Users</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+        }
+        .header {
+            background: #1e1e2f;
+            color: white;
+            padding: 20px;
+            font-size: 22px;
+        }
+        .container {
+            padding: 30px;
+        }
+        table {
+            width: 100%;
+            background: white;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th {
+            background: #6c5ce7;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        tr:hover {
+            background: #f1f1ff;
+        }
+        a.delete {
+            color: #d63031;
+            font-weight: bold;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">Admin – Manage Users</div>
+
+<div class="container">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Email</th>
+            <th>Action</th>
+        </tr>
+
+        {% for u in users %}
+        <tr>
+            <td>{{ u['id'] }}</td>
+            <td>{{ u['username'] }}</td>
+            <td>{{ u['role'] }}</td>
+            <td>{{ u['email'] }}</td>
+            <td>
+                <a class="delete"
+                   href="/admin/delete-user/{{ u['id'] }}"
+                   onclick="return confirm('Are you sure?')">
+                   Delete
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+</body>
+</html>
