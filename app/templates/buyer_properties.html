@@ -194,7 +194,7 @@ h2 {
     <input type="number" name="max_price" placeholder="Max Price" value="{{ max_price or '' }}">
 
     <button type="submit">Search</button>
-    <a href="/buyer/properties">Reset</a>
+    <a href="{{url_for('buyer.buyer_properties')}}">Reset</a>
 </form>
 
 {% if properties %}
@@ -220,7 +220,7 @@ h2 {
         <p class="property-info"><strong>Location:</strong> {{ p[13] }}, {{ p[12] }}, {{ p[11] }}</p>
 
         <div class="property-actions">
-            <a href="{{ url_for('property_details', property_id=p[0]) }}">
+            <a href="{{ url_for('buyer.property_details', property_id=p[0]) }}">
                 <button type="button">
                     {% if p[10] == 'sale' %}Buy{% else %}Rent{% endif %}
                 </button>
@@ -236,7 +236,7 @@ h2 {
 <p>No properties found.</p>
 {% endif %}
 
-<a href="/buyer/dashboard" class="back-link">⬅ Back to Dashboard</a>
+<a href="{{url_for('buyer.buyer_dashboard')}}" class="back-link">⬅ Back to Dashboard</a>
 
 </body>
 </html>
