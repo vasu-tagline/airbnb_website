@@ -13,6 +13,20 @@
             color: white;
             padding: 20px;
             font-size: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .back-btn {
+            padding: 6px 12px;
+            background: #3498db;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back-btn:hover {
+            background: #2980b9;
         }
         .container {
             padding: 30px;
@@ -37,18 +51,35 @@
         tr:hover {
             background: #f1f1ff;
         }
+        a.edit {
+            color: #0984e3;
+            font-weight: bold;
+            text-decoration: none;
+            margin-right: 10px;
+        }
         a.delete {
             color: #d63031;
             font-weight: bold;
             text-decoration: none;
         }
+        .top-bar {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
 
-<div class="header">Admin – Manage Users</div>
+<div class="header">
+    <span>Admin – Manage Users</span>
+</div>
 
 <div class="container">
+
+    <!-- Back to Dashboard button -->
+    <div class="top-bar">
+        <a href="/admin/dashboard" class="back-btn">← Back to Dashboard</a>
+    </div>
+
     <table>
         <tr>
             <th>ID</th>
@@ -65,9 +96,11 @@
             <td>{{ u['role'] }}</td>
             <td>{{ u['email'] }}</td>
             <td>
+                <a class="edit" href="/admin/edit-user/{{ u['id'] }}">Edit</a>
+                |
                 <a class="delete"
                    href="/admin/delete-user/{{ u['id'] }}"
-                   onclick="return confirm('Are you sure?')">
+                   onclick="return confirm('Delete user and all properties?')">
                    Delete
                 </a>
             </td>

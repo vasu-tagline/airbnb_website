@@ -4,7 +4,8 @@
     <title>Admin - Properties</title>
     <style>
         body { font-family: Arial; background: #f4f6f9; margin: 0; }
-        .navbar { background: #1e1e2f; color: white; padding: 15px 30px; }
+        .navbar { background: #1e1e2f; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar h2 { margin: 0; }
         .container { padding: 30px; }
         table {
             width: 100%;
@@ -26,9 +27,25 @@
             border-radius: 5px;
             text-decoration: none;
             color: white;
+            font-size: 13px;
         }
         .edit { background: #0984e3; }
         .delete { background: #d63031; }
+        .back-btn {
+            padding: 6px 12px;
+            background: #3498db;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            margin-right: 15px;
+        }
+        .back-btn:hover {
+            background: #2980b9;
+        }
+        .top-bar {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -38,6 +55,12 @@
 </div>
 
 <div class="container">
+
+    <!-- Back to Dashboard button -->
+    <div class="top-bar">
+        <a href="/admin/dashboard" class="back-btn">← Back to Dashboard</a>
+    </div>
+
     <table>
         <tr>
             <th>ID</th>
@@ -59,7 +82,7 @@
             <td>{{ p[8] }}</td>
             <td>
                 <a class="btn edit" href="/admin/edit-property/{{ p.id }}">Edit</a>
-                <a class="btn delete" href="/admin/delete-property/{{ p.id }}">Delete</a>
+                <a class="btn delete" href="/admin/delete-property/{{ p.id }}" onclick="return confirm('Are you sure you want to delete this property?');">Delete</a>
             </td>
         </tr>
         {% endfor %}
