@@ -266,7 +266,6 @@ http://127.0.0.1:5000
 
 * Password hashing
 * Email-based password reset
-* Admin dashboard
 * Pagination
 * Property approval system
 * SQLAlchemy migration
