@@ -163,7 +163,7 @@ FINAL_PROJECT/
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/vasudevgotagline-star/airbnb_website.git
+git clone https://github.com/vasu-tagline/airbnb_website.git
 cd your-repo-name
 ```
 
