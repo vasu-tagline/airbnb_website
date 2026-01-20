@@ -265,7 +265,6 @@ http://127.0.0.1:5000
 ## 📌 Future Enhancements
 
 * Password hashing
-* Email-based password reset
 * Pagination
 * Property approval system
 * SQLAlchemy migration
