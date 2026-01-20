@@ -217,7 +217,7 @@ MAIL_PASSWORD=your_email_app_password
 ## ▶️ Running the Application
 
 ```bash
-python app.py
+python run.py
 ```
 
 Open your browser and visit:
