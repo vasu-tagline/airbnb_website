@@ -80,35 +80,67 @@ static/uploads/
 ## 🧱 Project Structure
 
 ```text
-PRACTICE_/
+FINAL_PROJECT/
 │
-├── static/
-│   └── uploads/
+├── app/
+│   ├── __init__.py          # create_app() here
+│   ├── db.py                # get_db() here
+│   ├── extensions.py        # mail, etc.
+│   │
+│   ├── auth/
+│   │   ├── __init__.py
+│   │   └── routes.py
+│   │
+│   ├── buyer/
+│   │   ├── __init__.py
+│   │   └── routes.py
+│   │
+│   ├── owner/
+│   │   ├── __init__.py
+│   │   └── routes.py
+│   │
+│   ├── admin/
+│   │   ├── __init__.py
+│   │   └── routes.py
+│   │
+│   ├── home/
+│   │   ├── __init__.py
+│   │   └── routes.py
+│   │
+│   ├── templates/
+│   │   ├── add_property.html
+│   │   ├── admin_dashboard.html
+│   │   ├── admin_edit_property.html
+│   │   ├── admin_edit_user.html
+│   │   ├── admin_properties.html
+│   │   ├── admin_users.html
+│   │   ├── buyer_dashboard.html
+│   │   ├── buyer_properties.html
+│   │   ├── changepassword.html
+│   │   ├── edit_property.html
+│   │   ├── forgotpassword.html
+│   │   ├── home.html
+│   │   ├── login.html
+│   │   ├── main.html
+│   │   ├── my_properties.html
+│   │   ├── otppage.html
+│   │   ├── owner_dashboard.html
+│   │   ├── property_details.html
+│   │   ├── register.html
+│   │   ├── success.html
+│   │   └── view_properties.html
+│   │
+│   └── static/
+│       └── uploads/
 │
-├── templates/
-│   ├── add_property.html
-│   ├── buyer_dashboard.html
-│   ├── buyer_properties.html
-│   ├── changepassword.html
-│   ├── edit_property.html
-│   ├── forgotpassword.html
-│   ├── home.html
-│   ├── login.html
-│   ├── main.html
-│   ├── my_properties.html
-│   ├── otppage.html
-│   ├── owner_dashboard.html
-│   ├── property_details.html
-│   ├── register.html
-│   ├── success.html
-│   └── view_properties.html
-│
-├── venv/                # Virtual environment (ignored in Git)
-├── .env                 # Environment variables (ignored in Git)
-├── app.py               # Main Flask application
-├── users.db             # SQLite database
+├── run.py                  # entry point (ONLY this is run)
+├── config.py
+├── users.db
 ├── requirements.txt
-└── README.md
+├── README.md
+├── .env
+└── venv/                   # ignored by git
+
 ```
 
 ---
