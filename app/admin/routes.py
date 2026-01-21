@@ -223,5 +223,3 @@ def admin_edit_property(property_id):
     )
 
 
-
-
