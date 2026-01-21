@@ -30,7 +30,7 @@ def buyer_dashboard():
 @buyer_bp.route("/buyer/properties")
 def buyer_properties():
     if "user" not in session or session.get("role") != "buyer":
-        return redirect(url_for("login"))
+        return redirect(url_for("auth.login"))
 
     state = request.args.get("state")
     city = request.args.get("city")

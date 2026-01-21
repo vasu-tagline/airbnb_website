@@ -221,3 +221,7 @@ def admin_edit_property(property_id):
         "admin_edit_property.html",
         property=property
     )
+
+
+
+
