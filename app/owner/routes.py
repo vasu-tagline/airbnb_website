@@ -2,20 +2,22 @@ from flask import Blueprint,render_template,request,flash,redirect,url_for,sessi
 from werkzeug.utils import secure_filename
 import os
 from app.db import get_db
+from app.extensions import socketio
 
 owner_bp = Blueprint('owner',__name__)
 
 @owner_bp.route("/owner/dashboard")  
 def owner_dashboard():
+    if 'user' not in session:
+        return redirect(url_for("auth.login"))
     return render_template("owner_dashboard.html")
-
 
 
 
 @owner_bp.route("/add-property", methods=["GET", "POST"])
 def add_property():
     if "user" not in session or session.get("role") != "owner":
-        return redirect(url_for("login"))
+        return redirect(url_for("auth.login"))
     if request.method == "POST":
         title = request.form["title"]
         type_ = request.form["type"]
@@ -51,6 +53,23 @@ def add_property():
         """, (owner_id, title, type_, price, description,contact_number,deal_type,state,city,area,filename))
 
         conn.commit()
+        property_data = {
+            "id" : cursor.lastrowid,
+            "title": title,
+            "type": type_,
+            "price": price,
+            "description": description,
+            "contact_number": contact_number,
+            "deal_type": deal_type,
+            "state": state,
+            "status": "Pending",
+            "city": city,
+            "area": area,
+            "image": filename,
+            "owner": session["user"]
+}
+
+        socketio.emit("property_added", property_data)
         conn.close()
 
         return redirect(url_for("owner.owner_dashboard"))
@@ -63,7 +82,7 @@ def add_property():
 def my_properties():
     # Only owner allowed
     if "user" not in session or session.get("role") != "owner":
-        return redirect(url_for("login"))
+        return redirect(url_for("auth.login"))
 
 
 
@@ -132,7 +151,7 @@ def edit_property(property_id):
 @owner_bp.route("/delete-property/<int:property_id>")
 def delete_property(property_id):
     if "user" not in session or session.get("role") != "owner":
-        return redirect(url_for("login"))
+        return redirect(url_for("auth.login"))
 
     conn = get_db()
     cursor = conn.cursor()

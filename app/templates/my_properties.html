@@ -169,7 +169,8 @@
 <div class="properties-grid">
 
     {% for p in properties %}
-    <div class="property-card">
+    <div class="property-card" data-id="{{ p[0] }}">
+
 
         <div class="image-box">
             <img src="{{ url_for('static', filename='uploads/' + p[6]) }}">
@@ -208,4 +209,31 @@
 <a href="/owner/dashboard" class="back">⬅ Back to Dashboard</a>
 
 </body>
+
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const socket = io();
+
+    socket.on("connect", () => {
+        console.log("✅ Owner socket connected");
+    });
+
+    socket.on("property_deleted", function (data) {
+        console.log("❌ Property deleted:", data.property_id);
+
+        const card = document.querySelector(
+            `.property-card[data-id="${data.property_id}"]`
+        );
+
+        if (card) {
+            card.remove();
+        }
+    });
+
+});
+</script>
+</script>
 </html>

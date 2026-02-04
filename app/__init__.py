@@ -1,7 +1,9 @@
 from flask import Flask
 from config import Config
 from .db import create_table,create_property_table
-from app.extensions import mail
+from app.extensions import mail,socketio
+from flask_socketio import emit
+
 
 def create_app():
     app = Flask(__name__)
@@ -12,6 +14,7 @@ def create_app():
     create_property_table()
     
     mail.init_app(app)
+    socketio.init_app(app)
     
     from .home.routes import home_bp
     app.register_blueprint(home_bp)

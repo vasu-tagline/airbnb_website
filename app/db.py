@@ -46,3 +46,4 @@ def create_property_table():
     conn.commit()
     conn.close()
 
+

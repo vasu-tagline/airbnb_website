@@ -1,5 +1,7 @@
 from flask import Blueprint,render_template,request,flash,redirect,url_for,session
 from app.db import get_db,create_property_table
+from app.extensions import socketio
+
 admin_bp = Blueprint('admin',__name__)
 
 
@@ -8,7 +10,7 @@ admin_bp = Blueprint('admin',__name__)
 def admin_dashboard():
 
     if session.get("role") != "admin":
-        return redirect(url_for("login"))
+        return redirect(url_for("auth.login"))
 
     conn = get_db()
     cursor = conn.cursor()
@@ -38,11 +40,11 @@ def admin_dashboard():
 @admin_bp.route("/admin/users")
 def admin_users():
     if session.get("role") != "admin":
-        return redirect(url_for("login"))
+        return redirect(url_for("auth.login"))
 
     conn = get_db()
     users = conn.execute("""
-        SELECT id, username, role, email
+        SELECT id, username,password, role, email
         FROM users
         WHERE role != 'admin'
     """).fetchall()
@@ -54,7 +56,7 @@ def admin_users():
 @admin_bp.route("/admin/delete-user/<int:user_id>")
 def delete_user(user_id):
     if session.get("role") != "admin":
-        return redirect(url_for("login"))
+        return redirect(url_for("auth.login"))
 
     conn = get_db()
     cursor = conn.cursor()
@@ -81,7 +83,7 @@ def delete_user(user_id):
 @admin_bp.route("/admin/edit-user/<int:user_id>", methods=["GET", "POST"])
 def admin_edit_user(user_id):
     if session.get("role") != "admin":
-        return redirect(url_for("login"))
+        return redirect(url_for("auth.login"))
 
     conn = get_db()
     cursor = conn.cursor()
@@ -118,25 +120,10 @@ def admin_edit_user(user_id):
     return render_template("admin_edit_user.html", user=user)
 
 
-
-@admin_bp.route("/admin/delete-property/<int:pid>")
-def admin_delete_property(pid):
-    if session.get("role") != "admin":
-        return redirect(url_for("login"))
-
-    conn = get_db()
-    conn.execute("DELETE FROM properties WHERE id=?", (pid,))
-    conn.commit()
-    conn.close()
-
-    return redirect(url_for("admin.admin_properties"))
-
-
-
 @admin_bp.route("/admin/properties")
 def admin_properties():
     if session.get("role") != "admin":
-        return redirect(url_for("login"))
+        return redirect(url_for("auth.login"))
 
     conn = get_db()
     props = conn.execute("""
@@ -149,13 +136,30 @@ def admin_properties():
     return render_template("admin_properties.html", properties=props)
 
 
+@admin_bp.route("/admin/delete-property/<int:pid>")
+def admin_delete_property(pid):
+    if session.get("role") != "admin":
+        return redirect(url_for("auth.login"))
+
+    conn = get_db()
+    conn.execute("DELETE FROM properties WHERE id=?", (pid,))
+    conn.commit()
+    
+    socketio.emit("property_deleted", {
+    "property_id": pid
+})
+    conn.close()
+
+    return redirect(url_for("admin.admin_properties"))
+
+
 
 @admin_bp.route("/admin/edit-property/<int:property_id>", methods=["GET", "POST"])
 def admin_edit_property(property_id):
 
     # 🔐 Admin protection
     if session.get("role") != "admin":
-        return redirect(url_for("login"))
+        return redirect(url_for("auth.login"))
 
     conn = get_db()
     cursor = conn.cursor()

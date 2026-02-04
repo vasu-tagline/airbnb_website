@@ -11,6 +11,15 @@ auth_bp = Blueprint('auth',__name__)
 
 @auth_bp.route("/login" ,methods = ['GET', 'POST'] )
 def login():
+    if 'user' in session :
+        role = session.get("role")
+        if role == "owner":
+            return redirect(url_for("owner.owner_dashboard"))
+        elif role == "buyer":
+            return redirect(url_for("buyer.buyer_dashboard"))
+        else :
+            return redirect(url_for("admin.admin_dashboard"))
+        
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']

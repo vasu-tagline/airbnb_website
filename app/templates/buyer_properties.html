@@ -167,6 +167,7 @@ h2 {
 
 <body>
 
+
 <h2>🏡 Available Properties</h2>
 
 <!-- FILTER FORM -->
@@ -198,47 +199,111 @@ h2 {
     <button type="submit">Search</button>
     <a href="{{url_for('buyer.buyer_properties')}}">Reset</a>
 </form>
-
 {% if properties %}
-<div class="properties-grid">
+<div class="properties-grid" id="propertiesGrid">
 
-{% for p in properties %}
-<div class="property-card">
+    {% for p in properties %}
+    <div class="property-card" data-id="{{ p[0] }}">
 
-    <div class="image-box">
-        <img src="{{ url_for('static', filename='uploads/' + p[4]) }}">
-        <div class="badge">{{ p[10]|capitalize }}</div>
-    </div>
-
-    <div class="property-body">
-        <div class="property-title">{{ p[1] }}</div>
-        
-        <p class="property-info"><strong>Owner:</strong> {{ p[7] }}</p>
-        <p class="property-info"><strong>Type:</strong> {{ p[9] }}</p>
-        <p class="property-info"><strong>Price:</strong> ₹{{ p[2] }}</p>
-        <p class="property-info"><strong>Status:</strong> {{ p[6] }}</p>
-        <p class="property-info"><strong>Description:</strong> {{ p[3] }}</p>
-        <p class="property-info"><strong>Contact:</strong> {{ p[5] }}</p>
-        <p class="property-info"><strong>Location:</strong> {{ p[13] }}, {{ p[12] }}, {{ p[11] }}</p>
-
-        <div class="property-actions">
-            <a href="{{ url_for('buyer.property_details', property_id=p[0]) }}">
-                <button type="button">
-                    {% if p[10] == 'sale' %}Buy{% else %}Rent{% endif %}
-                </button>
-            </a>
+        <div class="image-box">
+            <img src="{{ url_for('static', filename='uploads/' + p[4]) }}">
+            <div class="badge">{{ p[10]|capitalize }}</div>
         </div>
-    </div>
 
-</div>
-{% endfor %}
+        <div class="property-body">
+            <div class="property-title">{{ p[1] }}</div>
+            
+            <p class="property-info"><strong>Owner:</strong> {{ p[7] }}</p>
+            <p class="property-info"><strong>Type:</strong> {{ p[9] }}</p>
+            <p class="property-info"><strong>Price:</strong> ₹{{ p[2] }}</p>
+            <p class="property-info"><strong>Status:</strong> {{ p[6] }}</p>
+            <p class="property-info"><strong>Description:</strong> {{ p[3] }}</p>
+            <p class="property-info"><strong>Contact:</strong> {{ p[5] }}</p>
+            <p class="property-info">
+                <strong>Location:</strong>
+                {{ p[13] }}, {{ p[12] }}, {{ p[11] }}
+            </p>
+
+            <div class="property-actions">
+                <a href="{{ url_for('buyer.property_details', property_id=p[0]) }}">
+                    <button type="button">
+                        {% if p[10] == 'sale' %}Buy{% else %}Rent{% endif %}
+                    </button>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    {% endfor %}
 
 </div>
 {% else %}
 <p>No properties found.</p>
 {% endif %}
 
-<a href="{{url_for('buyer.buyer_dashboard')}}" class="back-link">⬅ Back to Dashboard</a>
+<a href="{{ url_for('buyer.buyer_dashboard') }}" class="back-link">
+⬅ Back to Dashboard
+</a>
+
 
 </body>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script>
+    const socket = io();
+    
+
+    document.addEventListener("DOMContentLoaded", () => {
+        socket.on("property_deleted", function (data) {
+            console.log("❌ Property deleted:", data.property_id);
+
+            const card = document.querySelector(
+                `.property-card[data-id="${data.property_id}"]`
+            );
+
+            if (card) {
+                card.remove();
+            }
+        });
+
+        });
+
+
+
+    function createPropertyCard(p) {
+        return `
+        <div class="property-card">
+            <div class="image-box">
+                <img src="/static/uploads/${p.image}">
+                <div class="badge">${p.deal_type.charAt(0).toUpperCase() + p.deal_type.slice(1)}</div>
+            </div>
+    
+            <div class="property-body">
+                <div class="property-title">${p.title}</div>
+    
+                <p class="property-info"><strong>Owner:</strong> ${p.owner}</p>
+                <p class="property-info"><strong>Type:</strong> ${p.type}</p>
+                <p class="property-info"><strong>Price:</strong> ₹${p.price}</p>
+                <p class="property-info"><strong>Description:</strong> ${p.description}</p>
+                <p class="property-info"><strong>Contact:</strong> ${p.contact_number}</p>
+                <p class="property-info"><strong>Location:</strong> ${p.area}, ${p.city}, ${p.state}</p>
+    
+                <div class="property-actions">
+                    <button type="button">
+                        ${p.deal_type === "sale" ? "Buy" : "Rent"}
+                    </button>
+                </div>
+            </div>
+        </div>
+        `;
+    }
+    
+    socket.on("property_added", function (data) {
+        console.log("New property:", data);
+    
+        const grid = document.getElementById("propertiesGrid");
+        grid.insertAdjacentHTML("afterbegin", createPropertyCard(data));
+    });
+    </script>
+    
 </html>

@@ -10,7 +10,7 @@ buyer_bp = Blueprint('buyer',__name__)
 @buyer_bp.route("/buyer/dashboard")
 def buyer_dashboard():
     if "user" not in session or session.get("role") != "buyer":
-        return redirect(url_for("login"))
+        return redirect(url_for("auth.login"))
 
     conn = get_db()
     cursor = conn.cursor()
