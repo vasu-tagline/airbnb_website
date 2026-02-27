@@ -128,6 +128,115 @@ def property_details(property_id):
     return render_template("property_details.html", property=property)
 
 
-@buyer_bp.route("/payment")
-def payment():
-    return render_template("success.html")    
+@buyer_bp.route("/payment/<int:property_id>")
+def payment(property_id):
+
+    # 🔐 Auth check
+    if "user" not in session or session.get("role") != "buyer":
+        return redirect(url_for("auth.login"))
+
+    # username = session["user"]   # 👈 this EXISTS
+
+    # conn = get_db()
+    # cursor = conn.cursor()
+
+    # # 0️⃣ Get buyer_id from username
+    # cursor.execute(
+    #     "SELECT id FROM users WHERE username = ?",
+    #     (username,)
+    # )
+    # buyer = cursor.fetchone()
+    
+    buyer_id = session["user"][0]
+
+    conn = get_db()
+    cursor = conn.cursor()
+    
+
+    # 1️⃣ Get property details
+    cursor.execute("""
+        SELECT id, owner_id, price, deal_type, status
+        FROM properties
+        WHERE id = ?
+    """, (property_id,))
+    prop = cursor.fetchone()
+
+    if not prop:
+        conn.close()
+        return "Property not found"
+
+    if prop[4] != "available":
+        conn.close()
+        return "This property is no longer available"
+
+    owner_id = prop[1]
+    amount = prop[2]
+    deal_type = prop[3]
+
+    # 2️⃣ Save transaction
+    cursor.execute("""
+        INSERT INTO transactions
+        (property_id, buyer_id, owner_id, deal_type, amount, status)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (property_id, buyer_id, owner_id, deal_type, amount, "completed"))
+
+    # 3️⃣ Update property status
+    new_status = "sold" if deal_type == "sale" else "rented"
+    cursor.execute("""
+        UPDATE properties
+        SET status = ?
+        WHERE id = ?
+    """, (new_status, property_id))
+
+    conn.commit()
+    conn.close()
+
+    return render_template("success.html")
+
+
+
+@buyer_bp.route("/my-bookings")
+def my_bookings():
+    if "user" not in session or session.get("role") != "buyer":
+        return redirect(url_for("auth.login"))
+
+
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    username = session["user"]
+
+    cursor.execute(
+        "SELECT id FROM users WHERE username = ?",
+        (username,)
+    )
+    buyer_id = cursor.fetchone()[0]
+
+    cursor.execute("""
+        SELECT 
+            t.id,
+            p.title,
+            p.city,
+            p.area,
+            t.deal_type,
+            t.amount,
+            p.status,
+            t.created_at,
+            p.owner_id,
+            p.contact_number,
+            t.property_id,
+            t.buyer_id,
+            t.status
+        FROM transactions t
+        JOIN properties p ON t.property_id = p.id
+        WHERE t.buyer_id = ?
+        ORDER BY t.created_at DESC
+    """, (buyer_id,))
+
+    bookings = cursor.fetchall()
+    conn.close()
+
+    return render_template("my_bookings.html", bookings=bookings)
+
+
+

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Bookings</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+
+<h2>🧾 My Bookings</h2>
+
+{% if bookings %}
+<table>
+    <tr>
+        <th>Property</th>
+        <th>Location</th>
+        <th>Deal</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Date</th>
+        <th>Owner_id</th>
+        <th>Contact no.</th>
+        <th>property_id</th>
+        <th>buyer_id</th>
+        <th>payment_status</th>
+    </tr>
+
+    {% for b in bookings %}
+    <tr>
+        <td>{{ b[1] }}</td>
+        <td>{{ b[2] }}, {{ b[3] }}</td>
+        <td>{{ b[4] }}</td>
+        <td>₹{{ b[5] }}</td>
+        <td>{{ b[6] }}</td>
+        <td>{{ b[7] }}</td>
+        <td>{{ b[8] }}</td>
+        <td>{{ b[9] }}</td>
+        <td>{{ b[10] }}</td>
+        <td>{{ b[11] }}</td>
+        <td>{{ b[12] }}</td>
+        
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>No bookings yet.</p>
+{% endif %}
+
+<br>
+<a href="{{ url_for('buyer.buyer_dashboard') }}">⬅ Back to Dashboard</a>
+
+</body>
+</html>

@@ -47,3 +47,21 @@ def create_property_table():
     conn.close()
 
 
+def create_transaction_table():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS transactions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            property_id INTEGER NOT NULL,
+            buyer_id INTEGER NOT NULL,
+            owner_id INTEGER NOT NULL,
+            deal_type TEXT,
+            amount INTEGER,
+            status TEXT DEFAULT 'success',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    conn.commit()
+    conn.close()
+

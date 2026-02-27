@@ -173,3 +173,46 @@ def delete_property(property_id):
     conn.close()
 
     return redirect(url_for("owner.my_properties"))
+
+
+
+
+@owner_bp.route("/my-bookingss")
+def owner_bookings():
+    if "user" not in session or session.get("role") != "owner":
+        return redirect(url_for("auth.login"))
+
+    username = session["user"]
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # get owner_id
+    cursor.execute(
+        "SELECT id FROM users WHERE username = ?",
+        (username,)
+    )
+    owner = cursor.fetchone()
+    owner_id = owner[0]
+
+    # fetch bookings for owner properties
+    cursor.execute("""
+        SELECT
+            t.id,
+            p.title,
+            u.username AS buyer_name,
+            t.deal_type,
+            t.amount,
+            t.status,
+            t.created_at
+        FROM transactions t
+        JOIN properties p ON t.property_id = p.id
+        JOIN users u ON t.buyer_id = u.id
+        WHERE t.owner_id = ?
+        ORDER BY t.created_at DESC
+    """, (owner_id,))
+
+    bookings = cursor.fetchall()
+    conn.close()
+
+    return render_template("owner_bookings.html", bookings=bookings)

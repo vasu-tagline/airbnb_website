@@ -56,7 +56,10 @@
 
 </div>
 
-<h2><a href="/payment">Payment Now</a></h2>
+<h2><a href="{{ url_for('buyer.payment', property_id=property[0]) }}">
+    <button>Payment Now</button>
+</a>
+</h2>
 
 <br><br>
 <a href="/buyer/properties">⬅ Back to Properties</a>

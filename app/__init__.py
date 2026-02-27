@@ -1,6 +1,6 @@
 from flask import Flask
 from config import Config
-from .db import create_table,create_property_table
+from .db import create_table,create_property_table,create_transaction_table
 from app.extensions import mail,socketio
 from flask_socketio import emit
 
@@ -12,6 +12,8 @@ def create_app():
 
     create_table()
     create_property_table()
+    create_transaction_table()
+    
     
     mail.init_app(app)
     socketio.init_app(app)
